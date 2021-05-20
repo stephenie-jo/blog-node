@@ -1,5 +1,7 @@
-import * as dotenv from 'dotenv';
+import * as dotenv from 'dotenv'
 
-dotenv.config();
+dotenv.config()
 
-export const { PORT } = process.env;
+export const PORT = process.env.PORT || 3000
+
+export const prefix = '/api/node'
