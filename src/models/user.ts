@@ -1,4 +1,4 @@
-import { pool, getConn } from '../configs/mysql'
+import { connectBlog } from '../configs/connection'
 import { IUser } from '../types/user'
 class User {
   // 新增
@@ -7,9 +7,11 @@ class User {
     data: Array<IUser>
     message?: string
   }> {
-    const connection = await getConn()
+    const connection = await connectBlog()
+    console.log('test:>connection', connection)
     try {
       const { user_name, pass_word } = param
+      console.log('test:>user_name', user_name)
       const user = await connection.query(`select * from user where user_name = '${user_name}'`)
       console.log('test:>person', user)
       if (user.error) {
@@ -38,7 +40,7 @@ class User {
     //     message: '新增失败'
     //   }
     } finally {
-      connection.end()
+      connection.release()
     }
   }
 
@@ -47,7 +49,7 @@ class User {
     data: any
     message?: string
   }> {
-    const connection = await pool()
+    const connection = await connectBlog()
     try {
       const { user_name, pass_word } = params
       const res = await connection.query(`select * from user where user_name = '${user_name}' and pass_word = '${pass_word}'`)
@@ -72,7 +74,7 @@ class User {
         message: '登录失败'
       }
     } finally {
-      connection.end()
+      connection.release()
     }
   }
 }
